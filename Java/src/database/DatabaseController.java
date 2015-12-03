@@ -2,22 +2,33 @@ package database;
 
 import java.util.Random;
 
+import mysql.Connect;
+import soccer.Match;
+import soccer.Player;
+import soccer.Team;
 import exception.EmptyListException;
 import exception.InvalidInputException;
 import exception.MatchNotFoundException;
 import exception.PlayerNotFoundException;
 import exception.TeamNotFoundException;
-import soccer.*;
 
 /**
  * Database controller processes user data input and updates data for Player, Team and Match in the database manager
  */
 public class DatabaseController {
-
+	
 	/**
-	 * Database manager instance stores data
+	 * mySQL connection object
 	 */
-	private static DatabaseManager databaseManager;
+	private static Connect con;
+	
+	/**
+	 * Starts up DatabaseController and connects to mySQL database.
+	 * @param connect
+	 */
+	public static void start(Connect connect){
+		con = connect;
+	}
 
 	/**
 	 * Add a new match to the database
@@ -44,13 +55,24 @@ public class DatabaseController {
 	 * @param match Match
 	 * @param wTeam winning Team
 	 * @param lTeam losing Team
+	 * @param homeTeam home Team
+	 * @param awayTeam away Team
+	 * @param victory 1 if home won, 2 if away won, 3 if tie
 	 */
-	public static void setWinningTeam(Match match, Team wTeam, Team lTeam) {
+	public static void setWinningTeam(Match match, Team wTeam, Team lTeam, Team homeTeam, Team awayTeam, int victory) {
 		// Try catch loop in order to catch possible matchs that do not exist in database
 		try {
 			Match tempMatch = DatabaseManager.getMatch(match.getID());
 			tempMatch.setLosingTeam(lTeam);
 			tempMatch.setWinningTeam(wTeam);
+			
+			int homeID = homeTeam.getID();
+			int awayID = awayTeam.getID();
+			int homePoints = homeTeam.getNumPoints();
+			int awayPoints = awayTeam.getNumPoints();
+			
+			con.addMatch(homeID, awayID, homePoints, awayPoints, victory);
+			
 		} catch (MatchNotFoundException e) {
 			System.out.println("Match not found in database");
 		}
@@ -67,6 +89,18 @@ public class DatabaseController {
 		try {
 			Player tempPlayer = DatabaseManager.getPlayer(player.getID());
 			tempPlayer.addShot(isGoal);
+			
+			//Update mySQL
+			con.addShot(isGoal, player.getID());
+			Team team = null;
+			if(isGoal){
+				for(Team tmpteam : DatabaseManager.listTeams){
+					if(tmpteam.getID() == player.getTeamID()){
+						team = tmpteam;
+					}
+				}
+				con.addGoal(player.getID(), player.getTeamID(), player.getNumGoals(), team.getNumGoals());
+			}
 		} catch (PlayerNotFoundException e) {
 			System.out.println("Player not found in database");	
 		}
@@ -82,6 +116,17 @@ public class DatabaseController {
 		try {
 			Player tempPlayer = DatabaseManager.getPlayer(player.getID());
 			tempPlayer.addInfraction(penalty);
+			
+			//Update mySQL
+			Team team = null;
+			for(Team tmpteam : DatabaseManager.listTeams){
+				if(tmpteam.getID() == player.getTeamID()){
+					team = tmpteam;
+				}	
+			}
+			con.addInfraction(player.getID(), team.getID(), penalty, player.getNumInfractions(), team.getNumPenalties());
+			
+			
 		} catch (PlayerNotFoundException e) {
 			System.out.println("Player not found in database");	
 		}

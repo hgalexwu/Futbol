@@ -2,6 +2,8 @@ package database;
 
 import java.util.ArrayList;
 
+import mysql.Connect;
+
 import exception.EmptyListException;
 import exception.MatchNotFoundException;
 import exception.PlayerNotFoundException;
@@ -16,17 +18,43 @@ public class DatabaseManager {
 	/**
 	 * List of the teams in the database
 	 */
-	private static ArrayList<Team>	listTeams;
+	public static ArrayList<Team>	listTeams = new ArrayList<Team>();
 	
 	/**
 	 * List of the players in the database
 	 */
-	private static ArrayList<Player> listPlayers;
+	public static ArrayList<Player> listPlayers = new ArrayList<Player>();
 	
 	/**
 	 * List of the matches in the database
 	 */
-	private static ArrayList<Match> listMatchs;
+	public static ArrayList<Match> listMatchs = new ArrayList<Match>();
+	
+	/**
+	 * List of infractions in the database
+	 */
+	public static ArrayList<Infraction> listInfractions = new ArrayList<Infraction>();
+	
+	/**
+	 * List of Shots in the database
+	 */
+	public static ArrayList<Shot> listShots = new ArrayList<Shot>();
+	
+	
+	/**
+	 * mySQL connection object
+	 */
+	private static Connect con;
+	
+	/**
+	 * Starts up DatabaseManager, connects to mySQL database, then starts DatabaseController
+	 * @param connect connection class to mySQL database
+	 */
+	public static void start(){
+		Connect con = new Connect();
+		DatabaseController.start(con);
+	}
+	
 	
 	/**
 	 * Getter method returns match that matches matchID
@@ -107,6 +135,60 @@ public class DatabaseManager {
 			throw new EmptyListException();
 		else
 			return listPlayers;	
+	}
+	
+	/**
+	 * Adds a player into the database
+	 * @param player
+	 * @param teamID
+	 */
+	public static void addPlayer(Player player, int teamID){
+		//Add player
+		listPlayers.add(player);
+		
+		//Add player to team
+		for(int i = 0; i < listTeams.size(); i++){
+			if(listTeams.get(i).getID() == teamID){
+				listTeams.get(i).addPlayerToTeam(player);
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Adds a team into the database
+	 * @param team
+	 */
+	public static void addTeam(Team team){
+		//Add team
+		listTeams.add(team);
+	}
+	
+	/**
+	 * Adds a match into the database
+	 * @param match
+	 */
+	public static void addMatch(Match match){
+		//Add a match
+		listMatchs.add(match);
+	}
+	
+	/**
+	 * Adds an infraction into the database
+	 * @param match
+	 */
+	public static void addInfraction(Infraction infraction){
+		//Add a match
+		listInfractions.add(infraction);
+	}
+	
+	/**
+	 * Adds a shot into the database
+	 * @param match
+	 */
+	public static void addShot(Shot shot){
+		//Add a match
+		listShots.add(shot);
 	}
 	
 	

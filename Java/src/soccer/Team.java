@@ -24,9 +24,14 @@ public class Team {
 	private int id;
 	
 	/**
+	 * Team name
+	 */
+	private String name;
+	
+	/**
 	 * List of players on the team
 	 */
-	private ArrayList<Player> listPlayers;
+	private ArrayList<Player> listPlayers = new ArrayList<Player>();
 	
 	/**
 	 * number of Points of team
@@ -168,6 +173,29 @@ public class Team {
 			throw new InvalidInputException();
 		else 
 			this.numPenalties = penalties;
+	}
+	
+	/**
+	 * Adds a player into the team
+	 * @param player
+	 */
+	public void addPlayerToTeam(Player player){
+		listPlayers.add(player);
+	}
+	
+	/**
+	 * Returns name of team
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * Set team name
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

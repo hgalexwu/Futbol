@@ -77,6 +77,27 @@ public class Player {
 	 * List of infraction
 	 */
 	ArrayList<Infraction> listInfractions;
+	
+	/**
+	 * The ID of the team this player belongs to
+	 */
+	private int teamID;
+	
+	/**
+	 * Returns the team id of player
+	 * @return
+	 */
+	public int getTeamID(){
+		return this.teamID;
+	}
+	
+	/**
+	 * Sets the team id of player
+	 * @param id
+	 */
+	public void setTeamID(int id){
+		this.teamID = id;
+	}
 
 	/**
 	 * Getter method for player ID
@@ -180,6 +201,37 @@ public class Player {
 		listInfractions.add(new Infraction(card));
 		numInfractions ++;
 	}
-
+	
+	/**
+	 * Sets number of goals to a player
+	 * @param numGoals
+	 */
+	public void setNumGoals(int numGoals){
+		this.numGoals = numGoals;
+	}
+	
+	/**
+	 * Sets number of goals to a player
+	 * @param numGoals
+	 */
+	public void setNumInfractions(int numInfractions){
+		this.numInfractions = numInfractions;
+	}
+	
+	/**
+	 * Add an old infraction from database to player
+	 * @param infraction
+	 */
+	public void addToListOfInfraction(Infraction infraction){
+		listInfractions.add(infraction);
+	}
+	
+	/**
+	 * Add an old shot from database to player
+	 * @param shot
+	 */
+	public void addToListOfShots(Shot shot){
+		listShots.add(shot);
+	}
 
 }
