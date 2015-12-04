@@ -1,4 +1,4 @@
-package exception;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception;
 
 public class PasswordLengthException extends Exception{
 

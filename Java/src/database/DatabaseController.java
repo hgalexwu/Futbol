@@ -1,27 +1,24 @@
-package database;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.database;
 
 import java.util.Random;
-
-import mysql.Connect;
-import soccer.Match;
-import soccer.Player;
-import soccer.Team;
-import exception.EmptyListException;
-import exception.InvalidInputException;
-import exception.MatchNotFoundException;
-import exception.PlayerNotFoundException;
-import exception.TeamNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.mysql.Connect;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.EmptyListException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.InvalidInputException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.MatchNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.PlayerNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.TeamNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer.*;
 
 /**
  * Database controller processes user data input and updates data for Player, Team and Match in the database manager
  */
 public class DatabaseController {
-	
+
 	/**
 	 * mySQL connection object
 	 */
 	private static Connect con;
-	
+
 	/**
 	 * Starts up DatabaseController and connects to mySQL database.
 	 * @param connect
@@ -35,7 +32,7 @@ public class DatabaseController {
 	 * @param awayTeam awayTeam
 	 * @param homeTeam homeTeam
 	 */
-	public static void createNewMatch(Team awayTeam, Team homeTeam) {
+	public static Match createNewMatch(Team awayTeam, Team homeTeam) {
 		// Create a new match id that chooses random integer from 0 to 999 9999
 		Random random = new Random();
 		Match match = new Match(random.nextInt(10000000));
@@ -48,6 +45,8 @@ public class DatabaseController {
 		} catch (EmptyListException e) {
 			System.out.println("Database manager's list not yet initialized");
 		}
+
+		return match;
 	}
 
 	/**
@@ -65,18 +64,29 @@ public class DatabaseController {
 			Match tempMatch = DatabaseManager.getMatch(match.getID());
 			tempMatch.setLosingTeam(lTeam);
 			tempMatch.setWinningTeam(wTeam);
-			
+
+			//Update local database
+			if(victory == 0 || victory == 1){
+				wTeam.addNumPoints(3);
+			}
+			else{
+				homeTeam.addNumPoints(1);
+				awayTeam.addNumPoints(1); 
+			}
+
+
 			int homeID = homeTeam.getID();
 			int awayID = awayTeam.getID();
 			int homePoints = homeTeam.getNumPoints();
 			int awayPoints = awayTeam.getNumPoints();
-			
+
+			//Update mySQL database
 			con.addMatch(homeID, awayID, homePoints, awayPoints, victory);
-			
+
 		} catch (MatchNotFoundException e) {
 			System.out.println("Match not found in database");
 		}
-		
+
 	}
 
 	/**
@@ -89,7 +99,7 @@ public class DatabaseController {
 		try {
 			Player tempPlayer = DatabaseManager.getPlayer(player.getID());
 			tempPlayer.addShot(isGoal);
-			
+
 			//Update mySQL
 			con.addShot(isGoal, player.getID());
 			Team team = null;
@@ -97,38 +107,40 @@ public class DatabaseController {
 				for(Team tmpteam : DatabaseManager.listTeams){
 					if(tmpteam.getID() == player.getTeamID()){
 						team = tmpteam;
+						team.addNumGoals(1);
 					}
 				}
 				con.addGoal(player.getID(), player.getTeamID(), player.getNumGoals(), team.getNumGoals());
 			}
 		} catch (PlayerNotFoundException e) {
-			System.out.println("Player not found in database");	
+			System.out.println("Player not found in database");
 		}
 	}
 
 	/**
 	 * Add an infraction to a player
 	 * @param player Player who received an infraction
-	 * @param penalty if true, penalty was a red card, yellow otherwise
+	 * @param penalty 0 -> red card, 1 -> yellow card, 2 -> penalty kick
 	 */
-	public static void addInfraction(Player player, boolean penalty) {
+	public static void addInfraction(Player player, int penalty) {
 		// Try catch loop in order to catch possible players that do not exist in database
 		try {
 			Player tempPlayer = DatabaseManager.getPlayer(player.getID());
 			tempPlayer.addInfraction(penalty);
-			
+
 			//Update mySQL
 			Team team = null;
 			for(Team tmpteam : DatabaseManager.listTeams){
 				if(tmpteam.getID() == player.getTeamID()){
 					team = tmpteam;
-				}	
+					team.addNumPenalties(1);
+				}
 			}
 			con.addInfraction(player.getID(), team.getID(), penalty, player.getNumInfractions(), team.getNumPenalties());
-			
-			
+
+
 		} catch (PlayerNotFoundException e) {
-			System.out.println("Player not found in database");	
+			System.out.println("Player not found in database");
 		}
 	}
 
@@ -185,7 +197,4 @@ public class DatabaseController {
 			System.out.println("Player not found in database");
 		}
 	}
-
-
-
 }

@@ -1,4 +1,4 @@
-package soccer;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer;
 
 public class Shot {
 	

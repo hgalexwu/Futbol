@@ -1,8 +1,9 @@
-package soccer;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer;
 
 import java.util.ArrayList;
 
-import exception.*;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.*;
+
 
 /**
  * Player instance acting as a container for information regarding the player. Information assigned by the database Controller
@@ -77,20 +78,20 @@ public class Player {
 	 * List of infraction
 	 */
 	ArrayList<Infraction> listInfractions;
-	
+
 	/**
 	 * The ID of the team this player belongs to
 	 */
 	private int teamID;
-	
+
 	/**
 	 * Returns the team id of player
-	 * @return
+	 * @return teamID teamID of player
 	 */
 	public int getTeamID(){
 		return this.teamID;
 	}
-	
+
 	/**
 	 * Sets the team id of player
 	 * @param id
@@ -194,41 +195,95 @@ public class Player {
 	}
 
 	/**
-	 * Adding an infraction to a player
-	 * @param card True -> red card. False -> yellow card,
+	 * Adding multiple missed shot to player
+	 * @param nbShot int -> number of shot to add.
 	 */
-	public void addInfraction(boolean card) {
+	public void addMultipleShotMissed(int nbShot) {
+		for (int i = 0; i < nbShot; i++) {
+			listShots.add(new Shot(false));
+		}
+	}
+
+	/**
+	 * Adding multiple goals to player
+	 * @param nbShot int -> number of shot to add.
+	 */
+	public void addMultipleGoal(int nbShot) {
+		for (int i = 0; i < nbShot; i++) {
+			numGoals++;
+			listShots.add(new Shot(false));
+		}
+	}
+
+	/**
+	 * Adding an infraction to a player
+	 * @param card 1 -> red card, 2 -> yellow card, 3 -> penalty kick
+	 */
+	public void addInfraction(int card) {
 		listInfractions.add(new Infraction(card));
 		numInfractions ++;
 	}
-	
+
+	/**
+	 * Adding multiple yellow infractions to player
+	 * @param nbInfraction int -> number of shot to add.
+	 */
+	public void addMultipleYellowInfraction(int nbInfraction) {
+		for (int i = 0; i < nbInfraction; i++) {
+			numInfractions++;
+			listInfractions.add(new Infraction(1));
+		}
+	}
+
+	/**
+	 * Adding multiple yellow infractions to player
+	 * @param nbInfraction int -> number of shot to add.
+	 */
+	public void addMultipleRedInfraction(int nbInfraction) {
+		for (int i = 0; i < nbInfraction; i++) {
+			numInfractions++;
+			listInfractions.add(new Infraction(2));
+		}
+	}
+
+	/**
+	 * Adding multiple yellow infractions to player
+	 * @param nbInfraction int -> number of shot to add.
+	 */
+	public void addMultipleKickInfraction(int nbInfraction) {
+		for (int i = 0; i < nbInfraction; i++) {
+			numInfractions++;
+			listInfractions.add(new Infraction(3));
+		}
+	}
+
 	/**
 	 * Sets number of goals to a player
-	 * @param numGoals
+	 * @param numGoals number of goals
 	 */
 	public void setNumGoals(int numGoals){
 		this.numGoals = numGoals;
 	}
-	
+
 	/**
-	 * Sets number of goals to a player
-	 * @param numGoals
+	 * Sets number of infractions to a player
+	 * @param numInfractions number of infractions
 	 */
 	public void setNumInfractions(int numInfractions){
 		this.numInfractions = numInfractions;
 	}
-	
+
 	/**
 	 * Add an old infraction from database to player
-	 * @param infraction
+	 * @param infraction player's infraction
 	 */
 	public void addToListOfInfraction(Infraction infraction){
 		listInfractions.add(infraction);
 	}
-	
+
 	/**
 	 * Add an old shot from database to player
-	 * @param shot
+	 * @param shot player's shot
 	 */
 	public void addToListOfShots(Shot shot){
 		listShots.add(shot);

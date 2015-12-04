@@ -1,61 +1,59 @@
-package database;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.database;
 
 import java.util.ArrayList;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.EmptyListException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.MatchNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.PlayerNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.TeamNotFoundException;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer.*;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.mysql.Connect;
 
-import mysql.Connect;
-
-import exception.EmptyListException;
-import exception.MatchNotFoundException;
-import exception.PlayerNotFoundException;
-import exception.TeamNotFoundException;
-import soccer.*;
 
 /**
  * General container for the Match, Team and Player databases. Contains getter methods in order to access objects from database.
  */
 public class DatabaseManager {
-	
+
 	/**
 	 * List of the teams in the database
 	 */
 	public static ArrayList<Team>	listTeams = new ArrayList<Team>();
-	
+
 	/**
 	 * List of the players in the database
 	 */
 	public static ArrayList<Player> listPlayers = new ArrayList<Player>();
-	
+
 	/**
 	 * List of the matches in the database
 	 */
 	public static ArrayList<Match> listMatchs = new ArrayList<Match>();
-	
+
 	/**
 	 * List of infractions in the database
 	 */
 	public static ArrayList<Infraction> listInfractions = new ArrayList<Infraction>();
-	
+
 	/**
 	 * List of Shots in the database
 	 */
 	public static ArrayList<Shot> listShots = new ArrayList<Shot>();
-	
-	
+
+
 	/**
 	 * mySQL connection object
 	 */
 	private static Connect con;
-	
+
 	/**
 	 * Starts up DatabaseManager, connects to mySQL database, then starts DatabaseController
-	 * @param connect connection class to mySQL database
 	 */
 	public static void start(){
 		Connect con = new Connect();
 		DatabaseController.start(con);
 	}
-	
-	
+
+
 	/**
 	 * Getter method returns match that matches matchID
 	 * @param matchID matchID of match
@@ -70,7 +68,7 @@ public class DatabaseManager {
 		}
 		throw new MatchNotFoundException();
 	}
-	
+
 	/**
 	 * Getter method that returns a list of the matchs
 	 * @return list of matchs
@@ -80,12 +78,12 @@ public class DatabaseManager {
 		if (listMatchs == null)
 			throw new EmptyListException();
 		else
-			return listMatchs;	
+			return listMatchs;
 	}
-	
+
 	/**
 	 * Getter method returns team that matches teamID
-	 * @param teamID teamID of team 
+	 * @param teamID teamID of team
 	 * @return team with matching TeamID
 	 * @throws TeamNotFoundException Team not found in database
 	 */
@@ -97,7 +95,7 @@ public class DatabaseManager {
 		}
 		throw new TeamNotFoundException();
 	}
-	
+
 	/**
 	 * Getter method that returns a list of the teams
 	 * @return list of teams
@@ -107,9 +105,9 @@ public class DatabaseManager {
 		if (listTeams == null)
 			throw new EmptyListException();
 		else
-			return listTeams;	
+			return listTeams;
 	}
-	
+
 	/**
 	 * Getter method returns player that matches playerID
 	 * @param playerID playerID of player
@@ -124,7 +122,7 @@ public class DatabaseManager {
 		}
 		throw new PlayerNotFoundException();
 	}
-	
+
 	/**
 	 * Getter method that returns a list of the players
 	 * @return list of Players
@@ -134,9 +132,9 @@ public class DatabaseManager {
 		if (listPlayers == null)
 			throw new EmptyListException();
 		else
-			return listPlayers;	
+			return listPlayers;
 	}
-	
+
 	/**
 	 * Adds a player into the database
 	 * @param player
@@ -145,7 +143,7 @@ public class DatabaseManager {
 	public static void addPlayer(Player player, int teamID){
 		//Add player
 		listPlayers.add(player);
-		
+
 		//Add player to team
 		for(int i = 0; i < listTeams.size(); i++){
 			if(listTeams.get(i).getID() == teamID){
@@ -154,7 +152,7 @@ public class DatabaseManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a team into the database
 	 * @param team
@@ -163,7 +161,7 @@ public class DatabaseManager {
 		//Add team
 		listTeams.add(team);
 	}
-	
+
 	/**
 	 * Adds a match into the database
 	 * @param match
@@ -172,7 +170,7 @@ public class DatabaseManager {
 		//Add a match
 		listMatchs.add(match);
 	}
-	
+
 	/**
 	 * Adds an infraction into the database
 	 * @param match
@@ -181,7 +179,7 @@ public class DatabaseManager {
 		//Add a match
 		listInfractions.add(infraction);
 	}
-	
+
 	/**
 	 * Adds a shot into the database
 	 * @param match
@@ -190,10 +188,10 @@ public class DatabaseManager {
 		//Add a match
 		listShots.add(shot);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

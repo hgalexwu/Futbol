@@ -1,4 +1,4 @@
-package soccer;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer;
 
 /**
  * Match instance that acts as a container for information regarding a Match. Information assigned by the database Controller

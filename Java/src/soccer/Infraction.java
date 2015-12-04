@@ -1,4 +1,4 @@
-package soccer;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.soccer;
 
 /**
  * Infraction class 
@@ -6,31 +6,33 @@ package soccer;
 public class Infraction {
 	
 	/**
-	 * If true, penalty was a red card, otherwise it was a yellow card
+	 * If 0 -> red card,
+	 * If 1 -> yellow card
+	 * If 2 -> penalty kick
 	 */
-	private boolean penalty;
+	private int penalty;
 	
 	/**
 	 * Infraction constructor
-	 * @param penalty True -> Red Card. False -> Yellow Card
+	 * @param penalty 0 -> red card, 1 -> yellow card, 2 -> penalty kick
 	 */
-	public Infraction(boolean penalty) {
+	public Infraction(int penalty) {
 		this.penalty = penalty;
 	}
 
 	/**
 	 * Getter method that returns boolean penalty
-	 * @return penalty True -> Red Card. False -> Yellow Card
+	 * @return penalty 0 -> red card, 1 -> yellow card, 2 -> penalty kick
 	 */
-	public boolean getPenalty() {
+	public int getPenalty() {
 		return this.penalty;
 	}
 
 	/**
 	 * Setter method that sets boolean penalty to true or false
-	 * @param penalty True -> Red Card. False -> Yellow Card
+	 * @param penalty 0 -> red card, 1 -> yellow card, 2 -> penalty kick
 	 */
-	public void setPenalty(boolean penalty) {
+	public void setPenalty(int penalty) {
 		this.penalty = penalty;
 	}
 	

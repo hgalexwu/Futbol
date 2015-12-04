@@ -1,9 +1,9 @@
-package credentials;
+package com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.credentials;
 
 import java.util.Hashtable;
 
-import scorekeeperView.ScorekeeperView;
-import exception.*;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.scorekeeperView.ScorekeeperView;
+import com.fourpointzeroteam.nathan.fantasyfutbol.Futbol.exception.*;
 
 /**
  * Authentication class that allows access to the ScorekeeperView if the username and password are correct
@@ -13,7 +13,7 @@ public class Authentication {
 	/**
 	 * Hashtable instance. Keys (String) -> Username. Values (String) -> Password.
 	 */
-	private static Hashtable<String, String> credentials = new Hashtable<String,String>();
+	private static Hashtable<String, String> credentials = new Hashtable<String, String>() {{ put("nlarue", "fut001"); put("bkiml", "fut010");put("test", "test");put("alewu", "fut100"); put("1", "1");}};
 	
 	private static ScorekeeperView scorekeeperUI;
 	
